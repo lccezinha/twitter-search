@@ -45,7 +45,7 @@ public class TwitterSearchActivity extends Activity {
 		if(accessToken == null){
 			Toast.makeText(this, "Token não disponível", Toast.LENGTH_SHORT).show();
 		}else{
-			new TwitterSearch().execute(filter);
+			new TwitterTask().execute(filter);
 		}
 	}
 	
@@ -86,7 +86,7 @@ public class TwitterSearchActivity extends Activity {
 		}
 	}
 	
-	private class TwitterSearch extends AsyncTask<String, Void, String[]>{
+	private class TwitterTask extends AsyncTask<String, Void, String[]>{
 
 		ProgressDialog dialog;
 		

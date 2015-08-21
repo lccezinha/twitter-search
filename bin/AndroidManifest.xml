@@ -26,9 +26,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <service android:name="io.github.lccezinha.twittersearch.services.NotificationService" />
         <activity android:name="io.github.lccezinha.twittersearch.activities.TweetActivity" />
+        <service android:name="io.github.lccezinha.twittersearch.services.NotificationService" />
+        
+        <receiver android:name="io.github.lccezinha.twittersearch.broadcast.StartupReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        
+        
+        
     </application>
 
 </manifest>

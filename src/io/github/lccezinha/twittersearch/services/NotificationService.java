@@ -60,6 +60,16 @@ public class NotificationService extends Service {
 			
 			return base64;
 		}
+		
+		@Override
+		protected void onPostExecute(Void result){
+			ScheduledThreadPoolExecutor pool = new ScheduledThreadPoolExecutor(1);
+			long startDelay = 0;
+			long refresh_time = 1;
+			
+			TimeUnit unit = TimeUnit.MINUTES;
+			pool.scheduleAtFixedRate(new NotificationTask(), startDelay, refresh_time, unit);
+		}
 	}
 	
 	@Override
@@ -71,7 +81,7 @@ public class NotificationService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId){
 		ScheduledThreadPoolExecutor pool = new ScheduledThreadPoolExecutor(1);
 		long startDelay = 0;
-		long refresh_time = 10;
+		long refresh_time = 1;
 		
 		TimeUnit unit = TimeUnit.MINUTES;
 		pool.scheduleAtFixedRate(new NotificationTask(), startDelay, refresh_time, unit);
@@ -103,7 +113,7 @@ public class NotificationService extends Service {
 						.body();
 				
 			JSONObject jsonObject = new JSONObject(content);
-			refreshUrl = jsonObject.getString("refresh_url");
+			refreshUrl = jsonObject.getJSONObject("search_metadata").getString("refresh_url");
 			JSONArray results = jsonObject.getJSONArray("statuses");
 			
 			for(int i = 0; i < results.length(); i++){
@@ -139,13 +149,12 @@ public class NotificationService extends Service {
 			notification.defaults |= Notification.DEFAULT_VIBRATE;
 			notification.defaults |= Notification.DEFAULT_LIGHTS;
 			notification.defaults |= Notification.DEFAULT_SOUND;
+			
 			notification.setLatestEventInfo(context, title, text, pendingIntent);
 			
 			String ns = Context.NOTIFICATION_SERVICE;
 			NotificationManager notificationManager = (NotificationManager) getSystemService(ns);
 			notificationManager.notify(id, notification);
-			
-			
 		}
 	}
 }
